@@ -51,4 +51,38 @@ const findWaterWall = (walls) => {
   return result[largest];
 }
 
-module.exports = findWaterWall;
+const findAllWater = (walls) => {
+  let result = [];
+  
+  walls.forEach((wall, idx) => {
+    let left = wall;
+    let right = wall;
+    
+    //find left wall
+    let leftWall = walls.slice(0, idx+1);
+    for(let i = leftWall.length - 1; i >= 0; i--) {
+      if (left < leftWall[i] && 
+         (leftWall[i - 1] === undefined || leftWall[i - 1] < leftWall[i])) { 
+        left = leftWall[i];
+        break;
+      }
+    }
+    //find right wall
+    let rightWall = walls.slice(idx+1);
+    for(let i = 0; i < rightWall.length; i++) {
+      if (right < rightWall[i] &&  
+         (rightWall[i + 1] === undefined || rightWall[i + 1] < rightWall[i])) { 
+        right = rightWall[i];
+        break;
+      }
+    }
+    
+    //get current wall water volume
+    let vol = Math.min(left, right) - wall;
+    result.push(vol)
+  })
+  
+  return result;
+}
+
+module.exports = {findWaterWall, findAllWater};

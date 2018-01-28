@@ -946,12 +946,22 @@ module.exports = __webpack_require__(9);
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__http_helper_js__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__renderlogic_js__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__renderlogic_js___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__renderlogic_js__);
+
 
 
 document.getElementById('submit').addEventListener('click', () => {
   let input = document.getElementById('input').value;
+  let inputArr = input.split(', ').map(str => parseInt(str));
   event.preventDefault();
-  Object(__WEBPACK_IMPORTED_MODULE_0__http_helper_js__["a" /* default */])(input);
+
+  __WEBPACK_IMPORTED_MODULE_1__renderlogic_js___default.a.inputWall(inputArr);
+  Object(__WEBPACK_IMPORTED_MODULE_0__http_helper_js__["a" /* default */])(JSON.stringify(input)).then(res => {
+    // let inputNumArr = inputArr
+    __WEBPACK_IMPORTED_MODULE_1__renderlogic_js___default.a.fillWater(res.water, inputArr);
+    __WEBPACK_IMPORTED_MODULE_1__renderlogic_js___default.a.setPeak(res.waterWall, inputArr);
+  });
 });
 
 /***/ }),
@@ -963,9 +973,7 @@ document.getElementById('submit').addEventListener('click', () => {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_axios___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_axios__);
 
 
-const request = data => {
-  __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/submit', { input: data });
-};
+const request = data => __WEBPACK_IMPORTED_MODULE_0_axios___default.a.post('/submit', { input: data }).then(res => res.data);
 
 /* harmony default export */ __webpack_exports__["a"] = (request);
 
@@ -1858,6 +1866,50 @@ module.exports = function spread(callback) {
   };
 };
 
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports) {
+
+const inputWall = inputNum => {
+  for (let i = 0; i <= inputNum.length; i++) {
+    for (let j = 1; j <= inputNum[i]; j++) {
+      let id = (i + 1).toString() + j;
+      let idElement = document.getElementById(id);
+      idElement.className = 'wall';
+    }
+  }
+};
+
+const fillWater = (waterArr, wallArr) => {
+  for (let i = 0; i <= wallArr.length; i++) {
+    for (let j = 1; j <= waterArr[i]; j++) {
+      let id = (i + 1).toString() + (wallArr[i] + j);
+      let idElement = document.getElementById(id);
+      idElement.className = 'water';
+    }
+  }
+};
+
+const setPeak = (peakArr, wallArr) => {
+  console.log(peakArr, 'kkkkkk');
+  let leftWallIdx = peakArr[0];
+  let rightWallIdx = peakArr[1];
+
+  for (let i = 1; i <= wallArr[leftWallIdx]; i++) {
+    let id = (leftWallIdx + 1).toString() + i;
+    let idElement = document.getElementById(id);
+    idElement.className = 'peak';
+  }
+
+  for (let i = 1; i <= wallArr[rightWallIdx]; i++) {
+    let id = (rightWallIdx + 1).toString() + i;
+    let idElement = document.getElementById(id);
+    idElement.className = 'peak';
+  }
+};
+
+module.exports = { inputWall, fillWater, setPeak };
 
 /***/ })
 /******/ ]);
