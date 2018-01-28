@@ -26,8 +26,6 @@ const findWaterWall = (walls) => {
       }
     }
     
-   
-    
     //get current wall water volume
     let vol = Math.min(left[0], right[0]) - wall;
     
@@ -53,4 +51,4 @@ const findWaterWall = (walls) => {
   return result[largest];
 }
 
-  module.exports = findWaterWall;
+module.exports = findWaterWall;
